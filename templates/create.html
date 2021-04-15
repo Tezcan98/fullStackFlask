@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Shop Item - Start Bootstrap Template</title>
+  <title>ArananIs.com İlan Olustur</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -64,6 +64,14 @@
           </div>
           <div class="card-body">
           <div class="input-group">
+      
+            <div class="input-group my-3"> 
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">İlan Başlığı</label>
+            </div>
+             
+            <input type="text" class="input-group-prepend"> 
+          </div>
 
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -152,7 +160,7 @@
 <script>
  
     function maasbilgisi(element){
-        if(element.checked) 
+        if(!element.checked) 
             document.getElementById("maas").disabled = true;
         else
           document.getElementById("maas").disabled = false;
