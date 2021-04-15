@@ -1,23 +1,26 @@
 from flask_appbuilder import Model
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
+# before pip install flask_appbuilder, run this command ->>  pip install setuptools --upgrade
+
 from flask_appbuilder.models.mixins import ImageColumn
 
 class kullanici(Model):
     id = Column(Integer, primary_key=True)
     kullanici_adi = Column(String(100), unique = True, nullable=False)
     # cv fk
-    cv = db.Column(db.Integer, db.ForeignKey('cv.id'))
+    cv = Column(Integer, ForeignKey('cv.id'))
     photo = Column(ImageColumn(size=(300, 300, True), thumbnail_size=(30, 30, True)))
     #basvurular fk
-    basvurulan_isler = db.Column(db.Integer, db.ForeignKey('is.id'))
+    basvurulan_isler = Column(Integer, ForeignKey('isler.id'))
 
 class sirket(Model):
     id = Column(Integer, primary_key=True)
     sirket_ismi = Column(String(75), unique = True, nullable=False)
-    Tarihce = Column(String(512) nullable=True)
+    Tarihce = Column(String(512), nullable=True)
     #ilan fk 
-    ilanlar = db.Column(db.Integer, db.ForeignKey('is.id'))
+    ilanlar = Column(Integer, ForeignKey('isler.id'))
 
-class is(Model):
+class isler(Model):
     id = Column(Integer, primary_key=True)
     Baslik = Column(String(75), nullable=False)
     is_turu = Column(String(32), nullable=False)
