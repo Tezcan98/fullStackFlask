@@ -19,35 +19,7 @@
 
 <body>
 <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Arananİş.Com</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li> 
-           <li class="nav-item float-right">
-              <a class="navbar-brand" id="profil" href="#">
-                <img src="https://st3.depositphotos.com/3557671/12516/v/950/depositphotos_125169086-stock-illustration-man-with-beard-icon-cartoon.jpg"  id="Profil_image" width="50" height="50" class="d-inline-block align-top" alt="">
-                 
-              </a>
-            </li>
-        </ul>
-      </div>
-    </div>
-  </nav> 
+    {% include 'navbar.html' %}
   <!-- Page Content -->
   <div class="container ">
 
@@ -63,81 +35,79 @@
             İş İlanı Oluştur
           </div>
           <div class="card-body">
-          <div class="input-group">
-      
-            <div class="input-group my-3"> 
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">İlan Başlığı</label>
-            </div>
+             <div class="input-group">
+              <form method ="POST" action="/ilanolustur">
+                <div class="input-group my-3"> 
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">İlan Başlığı</label>
+                </div>
+                 
+                <input type="text" name="ilanbasligi" class="input-group-prepend"> 
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">İş Türü</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01" name="isturu"> 
+                  <option value="1">Tam Zamanlı</option>
+                  <option value="2">Kontratlı</option>
+                  <option value="3">Yarı Zamanlı</option>
+                  <option value="4">Staj</option>
+                </select>
+              </div>
+          
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">İstenen Tecrübe</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01" name="tecrube"> 
+                  <option value="1">Yeni Mezun</option>
+                  <option value="2">Uzman</option>
+                  <option value="3">Seniour</option>
+                  <option value="4">Juniour</option> 
+                  <option value="4">Başlangıç</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="">İl İlçe</span>
+                </div>
+                <input type="text" class="form-control" name="il">
+                <input type="text" class="form-control" name="ilce">
+              </div>
+          
+              <div class="input-group-prepend mt-3">
+                <span class="input-group-text">Görünen Açıklama</span>
+              </div>
+              <textarea class="form-control  mt-3" aria-label="With textarea" name="gorunen"></textarea> 
+              <div class="input-group my-3"> 
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Maaş Bilgisi</label>
+                </div>
+                  <div class="input-group-text">
+                    <input type="checkbox"  onchange="maasbilgisi(this)" aria-label="Checkbox for following text input">
+                  </div> 
+                <input id="maas" type="text" name="maas" class="input-group-prepend"> 
+              </div>
+
+              <div class="input-group-prepend mt-3">
+              <span class="input-group-text">Detaylı Açıklama</span>
+              </div>
+              <textarea class="form-control  mt-3" id="detayli" aria-label="With textarea" name="detayli"></textarea>
+           
+
+               <button type="submit" formmethod="post"  class="btn btn-primary btn-lg btn-block my-3" >Yayınla</button>
              
-            <input type="text" class="input-group-prepend"> 
-          </div>
-
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">İş Türü</label>
+             </form>
+             </div>
             </div>
-            <select class="custom-select" id="inputGroupSelect01"> 
-              <option value="1">Tam Zamanlı</option>
-              <option value="2">Kontratlı</option>
-              <option value="3">Yarı Zamanlı</option>
-              <option value="4">Staj</option>
-            </select>
-          </div>
-      
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">İstenen Tecrübe</label>
-            </div>
-            <select class="custom-select" id="inputGroupSelect01"> 
-              <option value="1">Yeni Mezun</option>
-              <option value="2">Uzman</option>
-              <option value="3">Seniour</option>
-              <option value="4">Juniour</option> 
-              <option value="4">Kalifiyesiz</option>
-            </select>
-          </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="">İl İlçe</span>
-        </div>
-        <input type="text" class="form-control">
-        <input type="text" class="form-control">
-      </div>
- 
-   
-
-       <div class="input-group-prepend mt-3">
-        <span class="input-group-text">Görünen Açıklama</span>
-      </div>
-        <textarea class="form-control  mt-3" aria-label="With textarea"></textarea> 
-          <div class="input-group my-3"> 
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01">Maaş Bilgisi</label>
-            </div>
-              <div class="input-group-text">
-                <input type="checkbox"  onchange="maasbilgisi(this)"  aria-label="Checkbox for following text input">
-              </div> 
-            <input id="maas" type="text" class="input-group-prepend"> 
-          </div>
-
-   <div class="input-group-prepend mt-3">
-        <span class="input-group-text">Detaylı Açıklama</span>
-      </div>
-        <textarea class="form-control  mt-3" id="detayli" aria-label="With textarea"></textarea>
-      
-
-
-          </div>
-
-         <button type="button" class="btn btn-primary btn-lg btn-block my-3">Yayınla</button>
-          </div>
 
          
         </div>
         <!-- /.card -->
 
-      </div>
+    </div>
       <!-- /.col-lg-9 -->
 
     </div>

@@ -31,6 +31,21 @@ class isler(Model):
     maas_bilgisi = Column(String(32), nullable=True)
     detayli_aciklama = Column(String(1024), nullable=False)
 
+    
+    def __init__(self, Baslik, is_turu, istenen_tecrube, il, ilce, gorunen_aciklama, maas_bilgisi, detayli_aciklama):
+        self.Baslik = Baslik
+        self.is_turu = is_turu
+        self.istenen_tecrube = istenen_tecrube
+        self.il   =  il
+        self.ilce =  ilce
+        self.gorunen_aciklama =  gorunen_aciklama
+        self.maas_bilgisi = maas_bilgisi
+        self.detayli_aciklama = detayli_aciklama
+
+
+    def listele(self, filtre, siralama, sayfa): # sayfada 12 tane olucak şekilde
+      return 1
+
 class cv(Model):
     id = Column(Integer, primary_key=True)
     isim_soyisim = Column(String(75))

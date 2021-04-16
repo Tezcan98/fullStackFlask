@@ -81,3 +81,12 @@ li{
   width: 300px;
   height: 250px;
 }
+
+
+.ilanlar{ 
+  background-color: #F1F4F6;
+}
+
+.container, .container-lg, .container-md, .container-sm, .container-xl{
+  max-width: 90% !important;
+}

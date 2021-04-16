@@ -20,36 +20,7 @@
 
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Arananİş.Com</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li> 
-           <li class="nav-item float-right">
-              <a class="navbar-brand" id="profil" href="#">
-                <img src="https://st3.depositphotos.com/3557671/12516/v/950/depositphotos_125169086-stock-illustration-man-with-beard-icon-cartoon.jpg"  id="Profil_image" width="50" height="50" class="d-inline-block align-top" alt="">
-                 
-              </a>
-            </li>
-        </ul>
-      </div>
-    </div>
-  </nav> 
+   {% include 'navbar.html' %}
 
   <!-- Page Content -->
   <div class="container">
@@ -86,7 +57,7 @@
       </div>
       <!-- /.col-lg-3 -->
 
-      <div class="col-lg-9 my-5">
+      <div class="col-lg-9 my-5 ilanlar">
   <div class="dropdown float-right mt-5">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Sıralama Ölçütü
@@ -167,11 +138,17 @@
             </div>
           </div>
 
-           
 
         </div>
         <!-- /.row -->
-
+                   
+        <ul class="pagination pagination-lg justify-content-center">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
       </div>
       <!-- /.col-lg-9 -->
 
@@ -206,16 +183,16 @@
             <p>Afiniti is the world’s leading applied artificial intelligence and advanced analytics provider. Afiniti Enterprise Behavioral Pairing™ uses artificial intelligence to identify subtle and valuable patterns of human interaction in order to pair individuals on the basis of behavior, leading to more successful interactions and measurable increases in enterprise profitability. Afiniti operates throughout the world and has measurably driven billions of dollars in incremental value for our clients. </p> 
             <hr>
             <h4>Key Responsibilities</h4>
-            <ul>
+             
               <li>Identify the business cases where our research methods/tools can add value</li> 
               <li>Conduct empirical research and develop methods/tools to help improve the effectiveness of our modeling tools and runtime applications.</li>
               <li>Synthesize research literature in the areas of statistical modeling, machine learning, operations research and identify if they can be built into our tools.</li> 
-            </ul>
+         
             <hr>
             <h4>Education and Qualifications</h4>
-           <ul>
+            
             <li>Enrolled in a graduate degree program in Statistics, Mathematics, Econometrics, Operations Research, or other field with relevant research</li>
-           </ul>
+            
             <small class="text-muted">Posted by Anonymous on 3/1/17</small>
             <hr>
             <a href="#" class="btn btn-success">CV GÖNDER</a>
