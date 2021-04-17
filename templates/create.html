@@ -26,17 +26,24 @@
     <div class="row my-5">
   
       <!-- /.col-lg-3 -->
-
+          <div class="col-lg-3">
+    
+       
+            <div class="list-group  my-5">
+              <a href="#" class="list-group-item">Yeni İlan Oluştur</a>
+              <a href="#" class="list-group-item">İlanlarım</a>
+              <a href="#" class="list-group-item">Şirket Profili</a>
+            </div> 
+          </div>
       
         <!-- /.card -->
-
+        <div class="col-lg-9 my-5 ilanlar">
         <div class="card card-outline-secondary my-5">
           <div class="card-header">
             İş İlanı Oluştur
           </div>
           <div class="card-body">
-             <div class="input-group">
-              <form method ="POST" action="/ilanolustur">
+             <div class="input-group"> 
                 <div class="input-group my-3"> 
                 <div class="input-group-prepend">
                   <label class="input-group-text" for="inputGroupSelect01">İlan Başlığı</label>
@@ -97,14 +104,15 @@
               <textarea class="form-control  mt-3" id="detayli" aria-label="With textarea" name="detayli"></textarea>
            
 
-               <button type="submit" formmethod="post"  class="btn btn-primary btn-lg btn-block my-3" >Yayınla</button>
+               <button onclick="sendPost()" formmethod="post"  class="btn btn-primary btn-lg btn-block my-3" >Yayınla</button>
              
-             </form>
+            
              </div>
             </div>
 
          
         </div>
+       </div>
         <!-- /.card -->
 
     </div>
@@ -135,6 +143,25 @@
         else
           document.getElementById("maas").disabled = false;
     }
+
+    function sendPost(){
+
+      alert("dsf")
+      // $.ajax({
+      //   type: "POST",
+      //   dataType: "json",
+      //   headers: {'X-CSRFToken': '{{ csrf_token }}'},
+      //   url: '/ilanolustur',  // buraya saved model to .tflite yaz 
+      //   data: {
+             
+      //   },
+      //   success: function (response) { 
+            
+      //   }
+      // }); 
+
+    }
+
 
 </script>
    

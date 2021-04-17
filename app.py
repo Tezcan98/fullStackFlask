@@ -32,6 +32,7 @@ def create():
 def ilanolustur(): 
 	if request.method == "POST":
 		yeni_is = models.isler(
+			#### ajax ile istek oluşturulacak
 			Baslik = request.form["ilanbasligi"],
 			is_turu =  listeler.is_turu[int(request.form["isturu"])],
 		    istenen_tecrube =  listeler.tecrube[int(request.form["tecrube"])],
@@ -46,7 +47,7 @@ def ilanolustur():
 		db.session.add(yeni_is) 
 		db.session.commit()
 		return 200
-		
+
 		# return str(models.isler.query.all()[0])
 		# return Listeler.tecrube[int(request.form["tecrube"])]
 	
