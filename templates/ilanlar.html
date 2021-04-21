@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>ArananIs.com İlan Olustur</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/shop-item.css" rel="stylesheet"> 
+</head>
+
+<body>
+<!-- Navigation -->
+    {% include 'navbar.html' %}
+  <!-- Page Content -->
+  <div class="container ">
+
+    <div class="row my-5">
+  
+      <!-- /.col-lg-3 -->
+          <div class="col-lg-3">
+    
+       
+            <div class="list-group  my-5">
+              <a href="#yeniilan" class="list-group-item">Yeni İlan Oluştur</a>
+              <a href="#ilanlarim" onclick="ilanlarimYukle()" class="list-group-item">İlanlarım</a>
+              <a href="#profil" class="list-group-item">Şirket Profili</a>
+            </div> 
+          </div>
+      
+        <!-- /.card -->
+        <div class="col-lg-9 my-5 ilanlar" id="icerik" >
+
+
+            {% include 'ilanolustur.html' %}
+
+        </div>
+        <!-- /.card -->
+
+    </div>
+      <!-- /.col-lg-9 --> 
+  </div>
+ 
+  <!-- /.container -->
+ 
+
+  <div class="modal fade" id="succesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">İşlem Başarılı</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Tebrikler, İş ilanı Başarıyla Oluşturuldu. Başvuran kişileri ilanlarım bölümünden inceleyebilirsiniz.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tamam</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script>
+ 
+    function maasbilgisi(element){
+        if(!element.checked) 
+            document.getElementById("maas").disabled = true;
+        else
+          document.getElementById("maas").disabled = false;
+    }
+
+
+    function ilanListele(ilanlar, html){
+ 
+      for(var i=0; i<ilanlar.length; i++){
+        icerik.innerHTML += html  
+        alert(html.getElementById("isim").value)
+        // alert(document.getElementsByName("ilan")[i].querySelectorAll(".ilanismi")[0].value)//.innerHTML += ilanlar[i][0];
+      }
+    }
+
+    function ilanlarimYukle(){
+        icerik =  document.getElementById("icerik")
+        icerik.removeChild(icerik.firstChild) 
+        icerik.removeChild(icerik.firstChild)
+        icerik.innerHTML+= "<div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>"
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            // contentType: 'application/json;charset=UTF-8',
+            url: '/ilanlistele',   
+            data: {
+            
+            },
+          success: function (response) {  
+              icerik.removeChild(icerik.firstChild) 
+              icerik.removeChild(icerik.firstChild)
+              //  
+              ilanListele(response.ilanlar, response.html)
+          },
+          error: function ( response ) {
+              console.log(response)
+          }
+      }); 
+
+        
+    }
+
+
+    function sendPost(){  
+
+      baslikInput = document.getElementsByName("ilanbasligi")[0] 
+      isturuInput = document.getElementsByName("isturu")[0]
+      istenenTecrubeInput = document.getElementsByName("tecrube")[0]
+      ilInput = document.getElementsByName("il")[0]
+      ilceInput = document.getElementsByName("ilce")[0]
+      gorunenAciklamaInput = document.getElementsByName("gorunen")[0]
+      maasBilgisiInput = document.getElementsByName("maas")[0]
+      detayliAciklamaInput = document.getElementsByName("detayli")[0]
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        // contentType: 'application/json;charset=UTF-8',
+        url: '/ilanolustur',   
+        data: {
+          'Baslik' :  baslikInput.value,
+		    	'is_turu' :  isturuInput.value,
+		      'istenen_tecrube' :  istenenTecrubeInput.value,
+		      'il'   :  ilInput.value,
+		      'ilce' :  ilceInput.value,
+		      'gorunen_aciklama' :  gorunenAciklamaInput.value,
+		      'maas_bilgisi' :  maasBilgisiInput.value,
+		      'detayli_aciklama' : detayliAciklamaInput.value
+        },
+        success: function (response) { 
+            console.log(response)
+            $("#succesModal").modal()
+            baslikInput.value = "";
+           
+            ilInput.value = "";
+            ilceInput.value = "";
+            gorunenAciklamaInput.value = "";
+            maasBilgisiInput.value = "";
+            detayliAciklamaInput.value = "";
+
+        },
+        error: function ( donen_veri ) {
+                console.log(donen_veri)
+        }
+      }); 
+
+    }
+
+
+</script>
+   
+
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<div class="card card-outline-secondary my-5">
+    <div class="card-header">
+      İş İlanı Oluştur
+    </div>
+    <div class="card-body">
+       <div class="input-group"> 
+          <div class="input-group my-3"> 
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">İlan Başlığı</label>
+          </div>
+           
+          <input type="text" name="ilanbasligi" class="input-group-prepend"> 
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">İş Türü</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01" name="isturu"> 
+            <option value="1">Tam Zamanlı</option>
+            <option value="2">Kontratlı</option>
+            <option value="3">Yarı Zamanlı</option>
+            <option value="4">Staj</option>
+          </select>
+        </div>
+    
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">İstenen Tecrübe</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01" name="tecrube"> 
+            <option value="1">Yeni Mezun</option>
+            <option value="2">Uzman</option>
+            <option value="3">Seniour</option>
+            <option value="4">Juniour</option> 
+            <option value="4">Başlangıç</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="">İl İlçe</span>
+          </div>
+          <input type="text" class="form-control" name="il">
+          <input type="text" class="form-control" name="ilce">
+        </div>
+    
+        <div class="input-group-prepend mt-3">
+          <span class="input-group-text">Görünen Açıklama</span>
+        </div>
+        <textarea class="form-control  mt-3" aria-label="With textarea" name="gorunen"></textarea> 
+        <div class="input-group my-3"> 
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Maaş Bilgisi</label>
+          </div>
+            <div class="input-group-text">
+              <input type="checkbox"  onchange="maasbilgisi(this)" aria-label="Checkbox for following text input">
+            </div> 
+          <input id="maas" type="text" name="maas" class="input-group-prepend"> 
+        </div>
+
+        <div class="input-group-prepend mt-3">
+        <span class="input-group-text">Detaylı Açıklama</span>
+        </div>
+        <textarea class="form-control  mt-3" id="detayli" aria-label="With textarea" name="detayli"></textarea>
+     
+
+         <button onclick="sendPost()" formmethod="post"  class="btn btn-primary btn-lg btn-block my-3" >Yayınla</button>
+       
+      
+       </div>
+      </div>
+
+   
+  </div>
