@@ -4,11 +4,53 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Date
 # before pip install flask_appbuilder, run this command ->>  pip install setuptools --upgrade
 from datetime import datetime 
 from flask_appbuilder.models.mixins import ImageColumn
+import base64
 
+
+class kullanici(db.Model):
+    __tablename__ = 'kullanici'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    kullanici_adi = Column(String(100), unique = True, nullable=False)
+    # cv fk
+    cv = Column(Integer, ForeignKey('cvs.id'))   
+    profil = Column(Integer, ForeignKey('resimler.id'))  
+
+    # join kullan
+    #def get_image(self):
+    #    return resimler.query.get(self.profil).decode()
+
+    #def get_cv
+    
+class sirket(db.Model):
+    __tablename__ = 'sirket'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    sirket_ismi = Column(String(75), unique = True, nullable=False)
+    Tarihce = Column(String(512), nullable=True) 
+    profil = Column(Integer, ForeignKey('resimler.id')) 
+    def __init__(self,sirket_ismi, Tarihce): 
+        self.sirket_ismi = sirket_ismi
+        self.Tarihce = Tarihce  
+    def get_image(self):
+        resim = resimler.query.get(self.profil)
+        if resim != None: 
+            return resim.decode()
+        else:
+            return "image.png"
+
+class resimler(db.Model):
+    __tablename__ = 'resimler'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    data = db.Column(db.BLOB)
+
+    def decode(self): 
+        return base64.b64encode(self.data).decode('ascii')
 
 class isler(db.Model):
     __tablename__ = 'isler'
     id = Column(Integer, primary_key=True, autoincrement=True)
+    #yayinlayan fk
+    yay_sirket = Column(Integer, ForeignKey('sirket.id')) 
+    
     Baslik = Column(String(75), nullable=False)
     is_turu = Column(String(32), nullable=False)
     istenen_tecrube = Column(String(32), nullable=False)
@@ -17,9 +59,10 @@ class isler(db.Model):
     gorunen_aciklama = Column(String(256), nullable=False)
     maas_bilgisi = Column(String(32), nullable=True)
     detayli_aciklama = Column(String(1024), nullable=False) 
- 
+    tarih = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)  
     
-    def __init__(self, Baslik, is_turu, istenen_tecrube, il, ilce, gorunen_aciklama, maas_bilgisi, detayli_aciklama): 
+    def __init__(self,yay_sirket, Baslik, is_turu, istenen_tecrube, il, ilce, gorunen_aciklama, maas_bilgisi, detayli_aciklama): 
+        self.yay_sirket = yay_sirket
         self.Baslik = Baslik
         self.is_turu = is_turu
         self.istenen_tecrube = istenen_tecrube
@@ -28,7 +71,16 @@ class isler(db.Model):
         self.gorunen_aciklama =  gorunen_aciklama
         self.maas_bilgisi = maas_bilgisi
         self.detayli_aciklama = detayli_aciklama 
-
+        self.tarih = datetime.now()
+    
+    def gunFarki(self): 
+        today = datetime.now()
+        diff = (today - self.tarih).days 
+        if diff == 0:
+            return "Bugün"
+        elif diff >30:
+            return diff/30+" ay önce"
+        return diff
     # def listele(self, filtre, siralama, sayfa): # sayfada 12 tane olucak şekilde
     #   return 1
 
@@ -49,25 +101,6 @@ class cvs(db.Model):
 
     # kullanici = db.relationship("kullanici", backref="kullanici")
 
-class kullanici(db.Model):
-    __tablename__ = 'kullanici'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    kullanici_adi = Column(String(100), unique = True, nullable=False)
-    # cv fk
-    cv = Column(Integer, ForeignKey('cvs.id'))  
-    photo = Column(ImageColumn(size=(300, 300, True), thumbnail_size=(30, 30, True)))
-    
-
-class sirket(db.Model):
-    __tablename__ = 'sirket'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    sirket_ismi = Column(String(75), unique = True, nullable=False)
-    Tarihce = Column(String(512), nullable=True) 
-
-    def __init__(self,sirket_ismi, Tarihce): 
-        self.sirket_ismi = sirket_ismi
-        self.Tarihce = Tarihce 
-
 class is_basvurulari(db.Model):
     __tablename__ = 'is_basvurulari'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -75,19 +108,7 @@ class is_basvurulari(db.Model):
     bas_is = Column(Integer, ForeignKey('isler.id'))  
     bas_kisi = Column(Integer, ForeignKey('kullanici.id'))  
     tarih = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-class sirket_ilanlari(db.Model):
-    __tablename__ = 'sirket_ilanlari'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    yayinlanan_is = Column(Integer, ForeignKey('isler.id'))  
-    yayinlayan_sirket = Column(Integer, ForeignKey('sirket.id'))  
-    tarih = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
-    def __init__(self, yayinlanan_is, yayinlayan_sirket,):
-        self.yayinlanan_is = yayinlanan_is
-        self.yayinlayan_sirket = yayinlayan_sirket 
-        self.tarih = datetime.now()
-
 db.create_all()
 
  

@@ -30,9 +30,9 @@
     
        
             <div class="list-group  my-5">
-              <a href="#yeniilan" class="list-group-item">Yeni İlan Oluştur</a>
-              <a href="#ilanlarim" onclick="ilanlarimYukle()" class="list-group-item">İlanlarım</a>
-              <a href="#profil" class="list-group-item">Şirket Profili</a>
+              <a href="#yeniilan" class="list-group-item" onclick="ilanOlusturmaEkrani()">Yeni İlan Oluştur</a>
+              <a href="#ilanlarim" onclick="ilanlarimYukleEkrani()" class="list-group-item">İlanlarım</a>
+              <a href="#profil"  onclick="sirketProfiliEkrani()" class="list-group-item">Şirket Profili</a>
             </div> 
           </div>
       
@@ -86,7 +86,7 @@
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script>
- 
+  
     function maasbilgisi(element){
         if(!element.checked) 
             document.getElementById("maas").disabled = true;
@@ -94,48 +94,88 @@
           document.getElementById("maas").disabled = false;
     }
 
-
-    function ilanListele(ilanlar, html){
- 
-      for(var i=0; i<ilanlar.length; i++){
-        icerik.innerHTML += html  
-        alert(html.getElementById("isim").value)
-        // alert(document.getElementsByName("ilan")[i].querySelectorAll(".ilanismi")[0].value)//.innerHTML += ilanlar[i][0];
-      }
+    function clearChildren(e){
+        var child = e.lastElementChild; 
+        while (child) {
+            e.removeChild(child);
+            child = e.lastElementChild;
+        }
     }
 
-    function ilanlarimYukle(){
-        icerik =  document.getElementById("icerik")
-        icerik.removeChild(icerik.firstChild) 
-        icerik.removeChild(icerik.firstChild)
-        icerik.innerHTML+= "<div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>"
+    function ilanOlusturmaEkrani(){
 
+        icerik =  document.getElementById("icerik") 
+        clearChildren(icerik)
+        icerik.innerHTML+= "<div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>"
+        
+        
         $.ajax({
             type: "POST",
             dataType: "json",
-            headers: {'X-CSRFToken': '{{ csrf_token }}'},
-            // contentType: 'application/json;charset=UTF-8',
-            url: '/ilanlistele',   
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}, 
+            url: '/olusturmaEkrani',   
             data: {
             
             },
           success: function (response) {  
-              icerik.removeChild(icerik.firstChild) 
-              icerik.removeChild(icerik.firstChild)
-              //  
-              ilanListele(response.ilanlar, response.html)
+              clearChildren(icerik) 
+              icerik.innerHTML += response.responseText  
           },
           error: function ( response ) {
               console.log(response)
           }
       }); 
 
-        
+
+    }
+
+    function sirketProfiliEkrani(){
+
+        icerik =  document.getElementById("icerik") 
+        clearChildren(icerik)
+        icerik.innerHTML+= "<div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>"
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}, 
+            url: '/sirketBilgileri',   
+          
+          success: function (response) {  
+              clearChildren(icerik) 
+              icerik.innerHTML += response.responseText  
+          },
+          error: function ( response ) {
+              console.log(response)
+          }
+      }); 
+
+    }
+
+    function ilanlarimYukleEkrani(){
+        icerik =  document.getElementById("icerik") 
+        clearChildren(icerik)
+        icerik.innerHTML+= "<div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div>"
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}, 
+            url: '/ilanlistele',   
+          
+          success: function (response) {  
+              clearChildren(icerik) 
+              icerik.innerHTML += response.responseText  
+          },
+          error: function ( response ) {
+              console.log(response)
+          }
+      }); 
+ 
     }
 
 
-    function sendPost(){  
-
+    function ilanOlusturmaPostGonder(){   
       baslikInput = document.getElementsByName("ilanbasligi")[0] 
       isturuInput = document.getElementsByName("isturu")[0]
       istenenTecrubeInput = document.getElementsByName("tecrube")[0]
@@ -143,6 +183,9 @@
       ilceInput = document.getElementsByName("ilce")[0]
       gorunenAciklamaInput = document.getElementsByName("gorunen")[0]
       maasBilgisiInput = document.getElementsByName("maas")[0]
+
+      // maasBilgisiValue = document.getElementById("maas").disabled ? null : maasBilgisiInput.value
+
       detayliAciklamaInput = document.getElementsByName("detayli")[0]
       $.ajax({
         type: "POST",
@@ -157,7 +200,7 @@
 		      'il'   :  ilInput.value,
 		      'ilce' :  ilceInput.value,
 		      'gorunen_aciklama' :  gorunenAciklamaInput.value,
-		      'maas_bilgisi' :  maasBilgisiInput.value,
+		      'maas_bilgisi' :  maasBilgisiValue,
 		      'detayli_aciklama' : detayliAciklamaInput.value
         },
         success: function (response) { 
@@ -178,11 +221,46 @@
       }); 
 
     }
+ 
+    function sirketBilgisiGuncellePost(){
 
 
+        var sirketismi =  document.getElementById("sirketismi").value 
+        var uzunyazi = document.getElementById("detayli").value
+        var resimBlob =  image = document.getElementById('output').src; 
+        
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}, 
+            url: '/ilanlistele',   
+            data : {
+                'sirketismi' : sirketismi,
+                'uzunyazi'   : uzunyazi,
+                'resimBlob'  : resimBlob, 
+            },
+          success: function (response) {  
+              clearChildren(icerik) 
+              icerik.innerHTML += response.responseText  
+          },
+          error: function ( response ) {
+              console.log(response)
+          }
+      }); 
+ 
+
+    }
+
+    function loadFile(event) { 
+          var image = document.getElementById('output'); 
+          var file = event.target.files[0]  
+          var blob =  URL.createObjectURL(file)
+          image.src = blob;
+
+        };
 </script>
    
 
 </body>
 
-</html>
+</html> 

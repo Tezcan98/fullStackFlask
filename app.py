@@ -36,40 +36,86 @@ def ilanlar():
 	# db.session.commit()
 	return render_template("ilanlar.html")
 
+@app.route('/sirketBilgileri', methods=['GET', 'POST'])
+def sirketBilgileri():
+	sirketBilgileri = models.sirket.query.get(1)  #id verilecek
+  
+	response = app.response_class(
+		response=json.dumps(
+			{	
+				"responseText": render_template("sirketBilgileri.html", bilgiler = sirketBilgileri) , 
+				"status":"success", 
+				"code":0 
+			}),
+		status=200,
+		mimetype='application/json'
+	) 
+	return response  
+
+
+@app.route('/sirketBilgileriGuncelle', methods=['GET', 'POST'])
+def sirketguncelle():
+	if request.method == "POST":
+
+		sirketismi = request.form.get('sirketismi','')
+		uzunyazi =request.form.get('uzunyazi','')
+		resimBlob =request.form.get('resimBlob','')
+
+		sirket = models.sirket.query.get(1)
+		sirket.update(dict(sirket_ismi =sirketismi, Tarihce = uzunyazi))
+		db.session.commit()
+
+
+
+
+		response = app.response_class(
+			response=json.dumps({"status":"success","code":0}),
+			status=200,
+			mimetype='application/json'
+		) 
+		return response  
+
+ 
 
 @app.route('/ilanlistele', methods=['GET', 'POST'])
 def ilanlari_listele():
-	# if request.method == "POST": 
-	
-	# sirket = models.sirket_ilanlari.query.filter_by(yayinlayan_sirket= 0)
-	
-
-
-	ilanlar = models.isler.query.filter_by(id = 1).all()  #id verilecek
-	
-	ilanList = []
-	for st in ilanlar:
-		ilanList.append(st.liste())
-	
+	# if request.method == "POST":  
+	ilanlar = models.isler.query.filter_by(yay_sirket = 1).all()  #id verilecek
+  
 	response = app.response_class(
             response=json.dumps(
 				{	
-					"html": render_template("ilanlariListele.html") , 
-					"status":"success",
-					'ilanlar' : ilanList,
-					"code":0
-
+					"responseText": render_template("ilanlariListele.html", ilanlar = ilanlar ) , 
+					"status":"success", 
+					"code":0 
 				}),
             status=200,
             mimetype='application/json'
 		)
+
 	return response 
+
+@app.route('/olusturmaEkrani', methods=['GET', 'POST'])
+def olusturmaEkrani():  
+	response = app.response_class(
+		response=json.dumps(
+			{	
+				"responseText": render_template("ilanolustur.html", ilanlar = ilanlar ) , 
+				"status":"success", 
+				"code":0 
+			}),
+		status=200,
+		mimetype='application/json'
+	)
+
+	return response  
 
 @app.route('/ilanolustur', methods=['GET', 'POST'])
 def ilanolustur(): 
 	if request.method == "POST":
 		yeni_is = models.isler(
 			#### ajax ile istek oluşturulacak
+			yay_sirket = 1,
 			Baslik = request.form.get('Baslik',''),
 			is_turu =request.form.get('is_turu',''),
 		    istenen_tecrube =  request.form.get('istenen_tecrube','')  ,
@@ -78,16 +124,11 @@ def ilanolustur():
 		    gorunen_aciklama =  request.form.get('gorunen_aciklama','')  ,
 		    maas_bilgisi =  request.form.get('maas_bilgisi','')  ,
 		    detayli_aciklama = request.form.get('detayli_aciklama','')  
+			
 			)
 		db.session.add(yeni_is) 
 		db.session.commit()
-		sirket_ilanlari = models.sirket_ilanlari( 
-			yayinlanan_is = yeni_is.id,
-			yayinlayan_sirket = models.sirket.query.get(0).id # id verilecek
-		)
-		
-		db.session.add(sirket_ilanlari)
-		db.session.commit()
+	 
 
 		response = app.response_class(
             response=json.dumps({"status":"success","code":0}),

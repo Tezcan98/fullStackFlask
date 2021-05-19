@@ -1,35 +1,36 @@
- 
-  <div name ="ilan">
+{% block content %} 
 
-      <div class="card mt-4"> 
-          <div class="card-body">
-              <h3 class="card-title ilanismi" id="isim" > sdfds</h3>
-              <h4> </h4>
-              <p class="card-text"> </p>
-              <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
-              Tarih
-            </div>
+{% for ilan in ilanlar %}
+    
+<div class="card bg-light mb-3" >
+    
+    <div class="card mt-4"> 
+        <div class="card-body">
+            <h3 class="card-title ilanismi" id="isim" > {{ilan.Baslik}}</h3>
+           
+            <p class="card-text">{{ilan.detayli_aciklama}}</p>
+         
+            <p class="card-text"> </p>
+            <h4>{{ilan.maas_bilgisi}}</h4>
+            <!-- <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span> -->
+            {{ilan.gunFarki()}}
         </div>
-        <!-- /.card -->
-
-        
-        
+    </div>
+        <!-- /.card -->   
         <div class="card card-outline-secondary my-4">
             <div class="card-header">
-                Product Reviews
+                Başvuran Kişi1
             </div>
             <div class="card-body">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
                 <small class="text-muted">Posted by Anonymous on 3/1/17</small>
-                <hr>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                <small class="text-muted">Posted by Anonymous on 3/1/17</small>
-                <hr>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                <small class="text-muted">Posted by Anonymous on 3/1/17</small>
-                <hr>
-                <a href="#" class="btn btn-success">Leave a Review</a>
-      </div>
-    </div>
-    <!-- /.card -->
+           
+                 
+                <a href="#" class="btn btn-success"> Kişi Sayfasini Görüntüle </a>
+            </div>
+        </div> 
+ 
 </div>
+ 
+{% endfor %}
+{% endblock %}
