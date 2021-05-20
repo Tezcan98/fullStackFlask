@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Date
 # before pip install flask_appbuilder, run this command ->>  pip install setuptools --upgrade
 from datetime import datetime 
 from flask_appbuilder.models.mixins import ImageColumn
+
 import base64
 
 
@@ -21,6 +22,18 @@ class kullanici(db.Model):
 
     #def get_cv
     
+  
+class resimler(db.Model): 
+    __tablename__ = 'resimler'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    img = db.Column(db.Text, unique=True, nullable=False) 
+    filename = db.Column(db.Text, nullable=False)
+    mimetype = db.Column(db.Text, nullable=False)
+    def __init__(self, img, filename, mimetype):
+        self.img = img  
+        self.filename = filename
+        self.mimetype = mimetype
+
 class sirket(db.Model):
     __tablename__ = 'sirket'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -30,20 +43,21 @@ class sirket(db.Model):
     def __init__(self,sirket_ismi, Tarihce): 
         self.sirket_ismi = sirket_ismi
         self.Tarihce = Tarihce  
-    def get_image(self):
+    def get_image(self):  ## join ile yapılacak
         resim = resimler.query.get(self.profil)
-        if resim != None: 
-            return resim.decode()
+        if resim != None:  
+            return base64.b64encode(resim.img).decode()
+            
         else:
             return "image.png"
+    def update(self, sirket_ismi, Tarihce):
+        self.sirket_ismi = sirket_ismi
+        self.Tarihce = Tarihce 
+        ## will be check if image exist
+        
 
-class resimler(db.Model):
-    __tablename__ = 'resimler'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    data = db.Column(db.BLOB)
-
-    def decode(self): 
-        return base64.b64encode(self.data).decode('ascii')
+        
+      
 
 class isler(db.Model):
     __tablename__ = 'isler'

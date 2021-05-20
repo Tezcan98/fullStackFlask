@@ -62,7 +62,7 @@
           </button>
         </div>
         <div class="modal-body">
-          Tebrikler, İş ilanı Başarıyla Oluşturuldu. Başvuran kişileri ilanlarım bölümünden inceleyebilirsiniz.
+          <p id="success_message"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Tamam</button>
@@ -83,8 +83,7 @@
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>   
 <script>
   
     function maasbilgisi(element){
@@ -184,7 +183,7 @@
       gorunenAciklamaInput = document.getElementsByName("gorunen")[0]
       maasBilgisiInput = document.getElementsByName("maas")[0]
 
-      // maasBilgisiValue = document.getElementById("maas").disabled ? null : maasBilgisiInput.value
+      maasBilgisiValue = document.getElementById("maas").disabled ? null : maasBilgisiInput.value
 
       detayliAciklamaInput = document.getElementsByName("detayli")[0]
       $.ajax({
@@ -204,15 +203,16 @@
 		      'detayli_aciklama' : detayliAciklamaInput.value
         },
         success: function (response) { 
-            console.log(response)
+            // console.log(response)
+            $("#success_message").text("Tebrikler, İş ilanı Başarıyla Oluşturuldu. Başvuran kişileri ilanlarım bölümünden inceleyebilirsiniz.")
             $("#succesModal").modal()
-            baslikInput.value = "";
-           
+            baslikInput.value = ""; 
             ilInput.value = "";
             ilceInput.value = "";
             gorunenAciklamaInput.value = "";
             maasBilgisiInput.value = "";
             detayliAciklamaInput.value = "";
+
 
         },
         error: function ( donen_veri ) {
@@ -220,44 +220,78 @@
         }
       }); 
 
-    }
+    } 
  
-    function sirketBilgisiGuncellePost(){
-
-
+    function sirketBilgisiGuncellePost(){ 
         var sirketismi =  document.getElementById("sirketismi").value 
         var uzunyazi = document.getElementById("detayli").value
-        var resimBlob =  image = document.getElementById('output').src; 
-        
+      //   var resimInput = document.getElementById('output')
+      var form_data = new FormData();
+      form_data.append('file', $('#inputGroupFile').prop('files')[0]);
+      form_data.append('sirketismi', sirketismi );
+      form_data.append('uzunyazi',  uzunyazi);
+         
         $.ajax({
-            type: "POST",
-            dataType: "json",
+            type: "POST", 
             headers: {'X-CSRFToken': '{{ csrf_token }}'}, 
-            url: '/ilanlistele',   
-            data : {
-                'sirketismi' : sirketismi,
-                'uzunyazi'   : uzunyazi,
-                'resimBlob'  : resimBlob, 
+            contentType: false,
+            cache: false,
+            processData: false,
+            url: '/sirketBilgileriGuncelle',     
+            data :  form_data,
+            success: function (response) {   
+                $("#success_message").text("Tebrikler, Şirket Bilgileriniz Güncellendi")
+          
+                $("#succesModal").modal()
             },
-          success: function (response) {  
-              clearChildren(icerik) 
-              icerik.innerHTML += response.responseText  
-          },
           error: function ( response ) {
               console.log(response)
-          }
+              console.log("sda")
+          
+            }
+
       }); 
  
+      // var form_data = new FormData();
+      // form_data.append('file', $('#inputGroupFile').prop('files')[0]);
+
+      // // $(function() {
+      //   $.ajax({
+      //       type: 'POST',
+      //       dataType: "json",
+      //       headers: {'X-CSRFToken': '{{ csrf_token }}'}, 
+      //       url:  '/sirketBilgileriGuncelle',
+      //       data: form_data,  
+      //       contentType: false,
+      //       cache: false,
+      //       processData: false,
+      //       success: function(data) {
+      //           console.log('Success!');
+      //       },
+      //   });
+      // });
 
     }
 
     function loadFile(event) { 
           var image = document.getElementById('output'); 
-          var file = event.target.files[0]  
+          var file = event.target.files[0] 
+          // var dataUri; 
+          // var reader = new FileReader();
+          // reader.onload = function(event) {
+          //   var dataUri = event.target.result 
+          //   console.log(dataUri) 
+          // };
+          // reader.onerror = function(event) {
+          //   console.error("File could not be read! Code " + event.target.error.code);
+          // };
+          // reader.readAsDataURL(event.target.files[0]);
+          
+
           var blob =  URL.createObjectURL(file)
           image.src = blob;
 
-        };
+    }
 </script>
    
 

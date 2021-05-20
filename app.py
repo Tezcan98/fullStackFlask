@@ -1,33 +1,33 @@
-from flask import Flask, render_template, request
-import models
+from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import listeler
 import os
-from flask import json
+from flask import json 
+from flask_migrate import Migrate
+import urllib 
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
 
-
-app = Flask(__name__,static_url_path='', 
-            static_folder='static')
-
-# db_path = os.path.join(os.path.dirname(__file__), 'app.db')
-# db_uri = 'sqlite:///{}'.format(db_path)
-# app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-# db = SQLAlchemy(app)
-
-file_path = os.path.abspath(os.getcwd())+"\database.db"
- 
+app = Flask(__name__, static_url_path='',
+            static_folder='static') 
+file_path = os.path.abspath(os.getcwd())+"\database.db" 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+file_path
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+import models
 
 
-@app.route("/") 
+@app.route("/")
 @app.route("/index")
 def home():
 	return render_template("index.html")
 
-@app.route("/ilanlar")
-def ilanlar():  
 
+@app.route("/ilanlar")
+def ilanlar():
+
+	# dummy	
 	# sirk = models.sirket(sirket_ismi = "apple",Tarihce= "uzunyazi")
 	# db.session.add(sirk)
 	# db.session.commit()
@@ -36,36 +36,51 @@ def ilanlar():
 	# db.session.commit()
 	return render_template("ilanlar.html")
 
+
 @app.route('/sirketBilgileri', methods=['GET', 'POST'])
 def sirketBilgileri():
-	sirketBilgileri = models.sirket.query.get(1)  #id verilecek
-  
+	sirketBilgileri = models.sirket.query.get(1)  # id verilecek
+	
 	response = app.response_class(
 		response=json.dumps(
-			{	
-				"responseText": render_template("sirketBilgileri.html", bilgiler = sirketBilgileri) , 
-				"status":"success", 
-				"code":0 
+			{
+				"responseText": render_template("sirketBilgileri.html", bilgiler=sirketBilgileri),
+				"status": "success",
+				"code": 0
 			}),
 		status=200,
 		mimetype='application/json'
-	) 
-	return response  
+	)
+	return response
+
+
+app_root = os.path.dirname(os.path.abspath(__file__))
 
 
 @app.route('/sirketBilgileriGuncelle', methods=['GET', 'POST'])
-def sirketguncelle():
+def sirketguncelle(): 
 	if request.method == "POST":
-
+		pp_file=request.files.get('file') 
 		sirketismi = request.form.get('sirketismi','')
-		uzunyazi =request.form.get('uzunyazi','')
-		resimBlob =request.form.get('resimBlob','')
+		uzunyazi =request.form.get('uzunyazi','') 
+		 
+		mimetype = pp_file.mimetype
+		filename = secure_filename(pp_file.filename)
+		Img = models.resimler(img = pp_file.read(), mimetype= mimetype, filename= filename)
+	  
+		sirket = models.sirket.query.get(1)  ## sirket id yapilacak 
+		
+		sirket.update(sirketismi, uzunyazi) 
 
-		sirket = models.sirket.query.get(1)
-		sirket.update(dict(sirket_ismi =sirketismi, Tarihce = uzunyazi))
+		# yeni_resim = models.resimler(m_file)	 
+		db.session.add(Img) 
+		db.session.flush()
+		sirket.profil = Img.id  
+		db.session.merge(sirket) 
 		db.session.commit()
 
 
+		# print("3df*",yeni_resim.id)
 
 
 		response = app.response_class(
@@ -114,7 +129,7 @@ def olusturmaEkrani():
 def ilanolustur(): 
 	if request.method == "POST":
 		yeni_is = models.isler(
-			#### ajax ile istek oluşturulacak
+			# ajax ile istek oluşturulacak
 			yay_sirket = 1,
 			Baslik = request.form.get('Baslik',''),
 			is_turu =request.form.get('is_turu',''),
@@ -140,7 +155,7 @@ def ilanolustur():
 		# return str(models.isler.query.all()[0])
 		# return Listeler.tecrube[int(request.form["tecrube"])]
 	
-		#return render_template('index.html')
+		# return render_template('index.html')
 	
 if __name__ == "__main__":
 	app.run()
